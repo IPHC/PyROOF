@@ -51,7 +51,7 @@ def processingQueue(processor,Analyzer,datasets,nWorkers,outputFolder) :
     for worker in workers :
         worker.join()
         if (worker.exitcode != 0) :
-            print "A worker returned exit code", worker.exitcode
+            print "(WARNING!) A worker returned exit code", worker.exitcode
 
     print "---------"
     print "All done."

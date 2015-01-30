@@ -131,41 +131,42 @@ class Selection :
         for i in range(n) :
             # Apply pT and eta critera
             if (pt[i]       <  10) : continue
-            if (abs(eta[i]) > 2.4) : continue
+            if (abs(eta[i]) > 2.5) : continue
 
             # Remove crack electron
             if (abs(scleta[i]) > 1.4442) and ((abs(scleta[i]) < 1.566)) : continue
 
-            # Apply quality cuts 
-            
-            # TODO/FIXME : check endcap/barrel definition
-            if (abs(eta[i]) < 1.5) :
-                if (abs(dEtaSCTrack[i]) >= 0.004) : continue
-                if (abs(dPhiSCTrack[i]) >= 0.06)  : continue
-                if (see[i]              >= 0.01)  : continue
-                if (hadronicOverEm[i]   >= 0.12)  : continue
+            # Electron ID
+            # Taken from https://twiki.cern.ch/twiki/bin/viewauth/CMS/CutBasedElectronIdentificationRun2
+            # Phys14, PU20, bx25, loose
+            if (abs(scleta[i]) < 1.479) :
+                if (abs(dEtaSCTrack[i]) >= 0.012 )  : continue
+                if (abs(dPhiSCTrack[i]) >= 0.073 )  : continue
+                if (see[i]              >= 0.01  )  : continue
+                if (hadronicOverEm[i]   >= 0.12  )  : continue
+                if (IoEmIoP[i]          >= 0.22  )  : continue
+                if (abs(dxy[i])         >= 0.02  )  : continue
+                if (abs(dz[i])          >= 0.17  )  : continue
             else :
-                if (abs(dEtaSCTrack[i]) >= 0.007) : continue
-                if (abs(dPhiSCTrack[i]) >= 0.03)  : continue
-                if (see[i]              >= 0.03)  : continue
-                if (hadronicOverEm[i]   >= 0.10)  : continue
+                if (abs(dEtaSCTrack[i]) >= 0.011 )  : continue
+                if (abs(dPhiSCTrack[i]) >= 0.14  )  : continue
+                if (see[i]              >= 0.03  )  : continue
+                if (hadronicOverEm[i]   >= 0.13  )  : continue
+                if (IoEmIoP[i]          >= 0.14  )  : continue
+                if (abs(dxy[i])         >= 0.10  )  : continue
+                if (abs(dz[i])          >= 0.20  )  : continue
             
-            if (IoEmIoP[i]            >= 0.05)  : continue
             if not (passConversionVeto[i]    )  : continue
             if (numberOfLostHits[i]   >  1   )  : continue
-            if (eSuperClusterOverP[i] >  4   )  : continue
-
-            # Vertex constrain
-            if (dxy[i]                >= 0.02)  : continue
-            if (dz[i]                 >= 0.1 )  : continue
 
             # Isolation
-            # TODO/FIXME : this is not the effective area isolation
+            # TODO / FIXME : check this is good (deltaBeta correction ?)
             absIso = isoChargedHadron[i]         \
                    + max(0.0,isoNeutralHadron[i] \
                            + isoPhoton[i]        \
                          - 0.5 * isoPU[i])
-            if (absIso / pt[i] > 0.15)    : continue
+            # WARNING : voluntary loose iso cut compared to recommended ID to investigate boosted regime
+            if (absIso / pt[i] > 0.30)    : continue
             
             self.selectedLeptons.append(self.lepton(id[i],
                                                     pt[i],
@@ -200,14 +201,15 @@ class Selection :
             # TODO/FIXME : add Loose jet ID
 
             # Apply pT and eta requirements
-            if (pt[i]       <  30) : continue
+            if (pt[i]       <  20) : continue
             if (abs(eta[i]) > 2.4) : continue
 
             # Remove jet overlaping with leptons
             foundOverlapWithLepton = False
             for lepton in self.selectedLeptons :
                 dR = common.deltaR(lepton.phi,lepton.eta,phi[i],eta[i])
-                if (dR < 0.4) : foundOverlapWithLepton = True; break
+                # TODO/FIXME this criteria should be tuned ?
+                if (dR < 0.5) : foundOverlapWithLepton = True; break
                 
             if (foundOverlapWithLepton) : continue
             

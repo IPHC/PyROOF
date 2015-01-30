@@ -1,15 +1,13 @@
-from tools               import genericTree
-import time
-import os, sys
 from rootpy              import log
+from tools               import genericTree
+import os, sys, time
+
 log["/ROOT.TClassTable.Add"].setLevel(log.ERROR)
 
 genericTreeWriter = genericTree.Writer
 genericTreeReader = genericTree.Reader
 
-def flatTreeProcess(dataset, i, Analyzer, outputFile) :
-
-    inputFile = dataset.files[i]
+def flatTreeProcess(inputFile, Analyzer, outputFile) :
 
     ###################
     # Create analyzer #
@@ -104,7 +102,7 @@ def flatTreeProcessingWorker(queue) :
         sys.stderr = open(logFileName,"w")
 
         # Launch processing function
-        flatTreeProcess(dataset, i, Analyzer, outputFile)
+        flatTreeProcess(dataset.files[i], Analyzer, outputFile)
 
         # Restore old stdout/stderr
         sys.stdout = oldStdout
