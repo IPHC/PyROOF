@@ -1,6 +1,6 @@
 
 from collections import namedtuple
-from ..tools     import commonFunctions as common
+from common      import commonFunctions as common
 
 class Selection :
     

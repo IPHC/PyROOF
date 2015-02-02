@@ -3,7 +3,7 @@
 # Input/outputs config #
 ########################
 
-from tools               import genericDataset
+from common import genericDataset
 Dataset = genericDataset.Dataset
 datasets = [  Dataset("ttbar","./store/FlatTrees/ttbar/*.root",xsection=800) ]
 
@@ -23,7 +23,7 @@ processor = flatTreeProcessingWorker
 # Parallelization stuff #
 #########################
 
-from tools import localMultiprocessing
+from common import localMultiprocessing
 processingQueue = localMultiprocessing.processingQueue
 
 nWorkers = 2

@@ -1,7 +1,0 @@
-Executable = "/bin/sh";
-Arguments = "WMSworker.sh";
-StdOutput = "std.out";
-StdError = "std.err";
-InputSandbox={"WMSworker.sh"};
-OutputSandbox = { "std.out", "std.err" };
-Requirements=other.GlueCEUniqueID=="sbgce2.in2p3.fr:8443/cream-pbs-cms"

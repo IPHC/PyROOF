@@ -1,0 +1,6 @@
+Executable = "/bin/sh workerJob.sh";
+StdOutput = "std.out";
+StdError = "std.err";
+InputSandbox={"workerJob.sh"};
+OutputSandbox = { "std.out", "std.err" };
+Requirements=other.GlueCEUniqueID=="sbgce2.in2p3.fr:8443/cream-pbs-cms";

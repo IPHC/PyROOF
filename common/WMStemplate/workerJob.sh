@@ -34,7 +34,7 @@ echo "> Starting task"
 echo "(" `date` ")"
 echo " "
 #python tools/wmsWorker.py $USER_NAME $DATASET_NAME $INPUT_FILE
-echo $USER_NAME $DATASET_NAME $INPUT_FILE > out.txt
+echo $USERNAME $DATASET_NAME $INPUT_FILE > out.txt
 
 echo " "
 echo "> Copying output"
