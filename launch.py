@@ -1,13 +1,10 @@
 #!/usr/bin/env python
 
-mode="PyROOF"
-#mode="WMS"
+#mode="localMultiprocessing"
+mode="WMS"
 
-
-
-
-if (mode == "PyROOF") :
-    from configPyROOF import *
+if (mode == "localMultiprocessing") :
+    from configLocalMultiprocessing import *
     main()
 
 if (mode == "WMS") :

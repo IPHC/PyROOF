@@ -3,11 +3,10 @@
 # Input/outputs config #
 ########################
 
-from common import genericDataset
-Dataset = genericDataset.Dataset
-datasets = [  Dataset("ttbar","./store/FlatTrees/ttbar/*.root",xsection=800) ]
+from analysis.stopPhys14 import Datasets
+datasets = Datasets.datasets
 
-outputFolder = "./store/babyTuples/ttbar/"
+outputFolder = "./store/babyTuples/"
 
 ############################
 #  Analyzer configuration  #
@@ -24,11 +23,11 @@ processor = flatTreeProcessingWorker
 #########################
 
 from common import localMultiprocessing
-processingQueue = localMultiprocessing.processingQueue
+launch = localMultiprocessing.launch
 
-nWorkers = 2
+nWorkers = 10
 
 def main() :
 
-    processingQueue(processor,analyzer,datasets,nWorkers,outputFolder)
+    launch(processor,analyzer,datasets,nWorkers,outputFolder)
 

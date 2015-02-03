@@ -1,8 +1,9 @@
 
-from os.path             import basename
+import os
+import glob
 from multiprocessing     import Queue, Process
 
-def processingQueue(processor,Analyzer,datasets,nWorkers,outputFolder) :
+def launch(processor,Analyzer,datasets,nWorkers,outputFolder) :
 
     ##################
     # Initiate queue #
@@ -14,10 +15,10 @@ def processingQueue(processor,Analyzer,datasets,nWorkers,outputFolder) :
     # Create pool of workers #
     ##########################
 
-    print "Creating pool of", nWorkers, "workers"
+    print "[Main] Creating pool of", nWorkers, "workers"
     workers = []
-    for i in range(nWorkers) :
-        w = Process(target=processor,args=((queue),))
+    for id in range(nWorkers) :
+        w = Process(target=processor,args=(id,queue))
         w.daemon = True
         w.start()
         workers.append(w)
@@ -26,32 +27,52 @@ def processingQueue(processor,Analyzer,datasets,nWorkers,outputFolder) :
     # Populate queue with todo information #
     ########################################
 
-    print "Filling queue..."
+    if os.path.exists(outputFolder+"/tmp") :
+        os.system("rm -r "+outputFolder+"/tmp/") 
+    
+    os.mkdir(outputFolder+"/tmp/") 
+
+    print "[Main] Filling queue..."
+    print " "
     for dataset in datasets :
 
-        print "Queuing", dataset.name, ",",len(dataset.files), " files."
+        print "[Main] Queuing", dataset.name, ",",len(dataset.files), " files."
+
+        os.mkdir(outputFolder+"/tmp/"+dataset.name) 
 
         for i in range(len(dataset.files)) :
 
-            fileBaseName = basename(dataset.files[i])
+            fileBaseName = os.path.basename(dataset.files[i])
 
-            queue.put((dataset, i, Analyzer, outputFolder+"/"+fileBaseName))
+            queue.put((dataset, i, Analyzer, outputFolder+"/tmp/"+dataset.name+"/"+fileBaseName))
 
     #####################################
     #  Wait for workers to do the jobs  #
     #####################################
 
-    print "Waiting for workers."
+    print "[Main] Waiting for workers..."
 
     for i in range(nWorkers) :
         queue.put("DONE")
 
-    # TODO/FIXME add display of status of jobs
-
     for worker in workers :
         worker.join()
         if (worker.exitcode != 0) :
-            print "(WARNING!) A worker returned exit code", worker.exitcode
+            print "[Main] (WARNING!) A worker returned exit code", worker.exitcode
 
-    print "---------"
-    print "All done."
+    #####################################
+    #  Merge outputs, delete tmp files  #
+    #####################################
+
+    print "[Main] Starging output merges"
+
+    for dataset in datasets :
+        print "[Main] Merging "+dataset.name
+        os.system("hadd -f "+outputFolder+"/"+dataset.name+".root "+outputFolder+"/tmp/"+dataset.name+"/*.root")
+
+    print "[Main] Removing tmp/*/*.root"
+    for file in glob.glob(outputFolder+"/tmp/*/*.root") :
+        os.remove(file) 
+
+    print "[Main] ---------"
+    print "[Main] All done."

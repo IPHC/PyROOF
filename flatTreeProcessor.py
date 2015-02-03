@@ -77,7 +77,7 @@ def flatTreeProcess(inputFile, Analyzer, outputFile) :
     sys.stdout.write("\n")
     sys.stdout.flush()
 
-def flatTreeProcessingWorker(queue) :
+def flatTreeProcessingWorker(id, queue) :
 
     # For ever
     while True :
@@ -91,7 +91,7 @@ def flatTreeProcessingWorker(queue) :
         # Else, parse arguments
         (dataset, i, Analyzer, outputFile) = task
         
-        print "Starting task for dataset", dataset.name, "- file", i+1, "/", len(dataset.files)
+        print "[Worker "+str(id+1)+"] Starting task for dataset", dataset.name, "- file "+str(i+1)+"/"+str(len(dataset.files))
 
         # Redirect stdout and stderr to log file
         (outputPath, outputExt) = os.path.splitext(outputFile)
