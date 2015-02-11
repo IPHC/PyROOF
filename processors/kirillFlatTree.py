@@ -7,7 +7,7 @@ log["/ROOT.TClassTable.Add"].setLevel(log.ERROR)
 genericTreeWriter = genericTree.Writer
 genericTreeReader = genericTree.Reader
 
-def flatTreeProcess(inputFile, Analyzer, outputFile) :
+def treeProcess(inputFile, Analyzer, outputFile) :
 
     ###################
     # Create analyzer #
@@ -77,7 +77,7 @@ def flatTreeProcess(inputFile, Analyzer, outputFile) :
     sys.stdout.write("\n")
     sys.stdout.flush()
 
-def flatTreeProcessingWorker(id, queue) :
+def treeProcessingWorker(id, queue) :
 
     # For ever
     while True :

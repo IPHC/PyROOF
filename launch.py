@@ -1,12 +1,19 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2.6
 
+mode="debugging"
 #mode="localMultiprocessing"
-mode="WMS"
+#mode="wmsTaskCreator"
 
+from config import config, debuggingMode, localMultiprocessing, wmsTaskCreator
+
+if (mode == "debugging") :
+    debuggingMode.main()
+        
 if (mode == "localMultiprocessing") :
-    from configLocalMultiprocessing import *
-    main()
+    localMultiprocessing()
 
-if (mode == "WMS") :
-    from configWMS import *
-    main()
+if (mode == "wmsTaskCreator") :
+    wmsTaskCreato()
+
+if (mode == "wmsWorker") :
+    wmsWorker()
