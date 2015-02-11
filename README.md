@@ -10,7 +10,7 @@ Workflow
 Install and usage
 -----------------
 
-You will need `rootpy` installed somewhere. See instructions here :
+You will need `rootpy` installed somewhere. (Full instructions [here](http://www.rootpy.org/install.html))
 
 ```
 git clone git://github.com/rootpy/rootpy.git
@@ -31,4 +31,4 @@ Then plug your analysis selection, babyTuple format, variables and datasets in `
 git clone https://github.com/oneLeptonStopAt13TeV/phys14Selection.git analysis/stopPhys14
 ```
 
-In `config`, `config.py`, `localMultiprocessing.py` and `wmsTaskCreator.py` allow you to configure how you want things to be done, such as which analysis to use (in the previous example, stopPhys14). Then from `launch.py`, you can choose wether your want to run using debugging mode, local multiprocessing or WMS jobs.
+In the `/config/` folder, `config.py`, `localMultiprocessing.py` and `wmsTaskCreator.py` allow you to configure how you want things to be done, such as which analysis to use (in the previous example, stopPhys14). Then from `launch.py`, you can choose wether your want to run using debugging mode, local multiprocessing or WMS jobs.
