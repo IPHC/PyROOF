@@ -16,7 +16,8 @@ processorModule = __import__("processors."+processorName, fromlist=['treeProcess
 datasets = analysisModule.Datasets.datasets
 analyzer = analysisModule.Analyzer.Analyzer
 
-processor = processorModule.treeProcess
+processor         = processorModule.treeProcess
+processorParallel = processorModule.treeProcessingWorker
 
 
 

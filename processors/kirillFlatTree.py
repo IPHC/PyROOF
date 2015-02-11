@@ -102,7 +102,7 @@ def treeProcessingWorker(id, queue) :
         sys.stderr = open(logFileName,"w")
 
         # Launch processing function
-        flatTreeProcess(dataset.files[i], Analyzer, outputFile)
+        treeProcess(dataset.files[i], Analyzer, outputFile)
 
         # Restore old stdout/stderr
         sys.stdout = oldStdout

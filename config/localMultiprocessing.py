@@ -1,5 +1,5 @@
 
-import analysis
+import config
 
 # #############
 # #  Config   #
@@ -16,5 +16,5 @@ nWorkers = 10
 from common import localMultiprocessing
 
 def main() :
-    localMultiprocessing.launch(processor,analyzer,datasets,nWorkers,outputFolder)
+    localMultiprocessing.launch(config.processorParallel,config.analyzer,config.datasets,nWorkers,outputFolder)
 
