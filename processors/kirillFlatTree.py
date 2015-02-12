@@ -1,5 +1,5 @@
 from rootpy import log
-from common import genericTree
+from core   import genericTree
 import os, sys, time
 
 log["/ROOT.TClassTable.Add"].setLevel(log.ERROR)

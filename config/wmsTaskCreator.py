@@ -6,13 +6,13 @@ import analysis
 ##########################
 
 taskName="wmsTask"
-commonPackage="https://github.com/alexAubin/flatTreeAnalysis"
+corePackage="https://github.com/alexAubin/flatTreeAnalysis"
 
 ##########################
 
-from common import WMStaskCreator
+from core import WMStaskCreator
 
 createWMStask = WMStaskCreator.createWMStask
 
 def main() :
-    createWMStask(taskName,commonPackage,analysisName,processorName)
+    createWMStask(taskName,corePackage,analysisName,processorName)

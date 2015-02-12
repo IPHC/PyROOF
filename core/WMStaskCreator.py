@@ -1,6 +1,6 @@
 import os, time
 
-def createWMStask(taskName,commonPackage,analysis,processor) :
+def createWMStask(taskName,corePackage,analysis,processor) :
 
     userName=os.getlogin()
     folderName = taskName+"_"+time.strftime("%m%d_%H%M")
@@ -31,13 +31,13 @@ def createWMStask(taskName,commonPackage,analysis,processor) :
         f.write('USERNAME='+userName+'\n')
         f.write('OUTPUT_DIRECTORY="'+DPMoutputDirectoryFull+'"\n')
         f.write('CMSSW_VERSION="'+cmsswVersion+'"\n')
-        f.write('COMMON_PACKAGE="'+commonPackage+'"\n')
+        f.write('CORE_PACKAGE="'+corePackage+'"\n')
         f.write('ANALYSIS="'+analysis+'"\n')
         f.write('SCRAM_ARCH="'+scramArch+'"\n')
         f.write('ROOTPY_LOCATION="'+rootpyLocation+'"\n')
 
         # Dump job template
-        with open("common/WMStemplate/workerJob.sh","r") as template :
+        with open("core/WMStemplate/workerJob.sh","r") as template :
             for line in template :
                 f.write(line)
 
@@ -48,7 +48,7 @@ def createWMStask(taskName,commonPackage,analysis,processor) :
     os.mkdir(folderName+"/jobs/")
     for (i, job) in enumerate(jobs) :
         with open(folderName+"/jobs/"+str(i)+".jdl","w") as jobConfig :
-            with open("common/WMStemplate/workerConfig.jdl","r") as template :
+            with open("core/WMStemplate/workerConfig.jdl","r") as template :
                 for line in template :
                     jobConfig.write(line)
             

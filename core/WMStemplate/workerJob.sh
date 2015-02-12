@@ -25,7 +25,7 @@ cmsrel CMSSW_$CMSSW_VERSION
 cd CMSSW_$CMSSW_VERSION/src
 cmsenv
 cd ../..
-git clone $COMMON_PACKAGE analysisPackage
+git clone $CORE_PACKAGE analysisPackage
 cd analysisPackage
 
 echo " "
