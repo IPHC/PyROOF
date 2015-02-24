@@ -42,3 +42,11 @@ To get help about options (to launch in debug mode, local multiprocessing or WMS
 ```
 ./PyROOF.py --help
 ```
+
+Todo
+----
+
+- Finish test and implementation of WMS task creation
+- Option to block mass production if there are uncommited analyses changes + automatically flag prod with the last analysis' code commit ID
+- Access from analysis code to current dataset cross section and initial number of events
+- Option to run only on n% of the dataset files
