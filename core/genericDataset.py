@@ -33,12 +33,13 @@ class Dataset:
                     self.files.append(xrdPath+fields[8])
 
         else :
-            print "Wildcard for dataset ", self.name, "doesn't starts with '/' or 'root://'"
+            print "Wildcard for dataset ", self.name, "doesn't starts with 'local:' or 'dpm:'"
 
         # Check files have been found
 
         if (len(self.files) == 0) :
-            print "Error : found 0 files when initializing dataset "+self.name+"."
+            print "Error : no files found when initializing dataset "+self.name+"."
+            print "Check your input path/wildcard :", wildcard
             print "Exiting."
             sys.exit(-1)
 
