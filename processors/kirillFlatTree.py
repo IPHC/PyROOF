@@ -1,20 +1,22 @@
 from rootpy import log
 from core   import genericTree
 import os, sys, time
+from rootpy.io   import root_open
 
 log["/ROOT.TClassTable.Add"].setLevel(log.ERROR)
+log["/ROOT.TGClient.TGClient"].setLevel(log.ERROR)
 
 genericTreeWriter = genericTree.Writer
 genericTreeReader = genericTree.Reader
 
-def treeProcess(inputFile, Analyzer, outputFile) :
+def treeProcess(inputFile, Analyzer, outputFile, dataset) :
 
     ###################
     # Create analyzer #
     ###################
 
-    print "Creating analyzer"
-    analyzer = Analyzer()
+    print "> Creating analyzer"
+    analyzer = Analyzer(dataset)
     analyzerRequiredInputBranches = analyzer.requiredBranches
     analyzerBabyTupleFormat       = analyzer.babyTupleFormat
 
@@ -22,7 +24,7 @@ def treeProcess(inputFile, Analyzer, outputFile) :
     # Open FlatTree #
     #################
 
-    print "Opening input tree (", inputFile, ")"
+    print "> Opening input tree ("+inputFile+")"
     flatTreeReader = genericTree.Reader()
     flatTreeReader.loadTree(inputFile,"FlatTree/tree")
     flatTreeReader.useBranches(analyzerRequiredInputBranches)
@@ -31,7 +33,7 @@ def treeProcess(inputFile, Analyzer, outputFile) :
     # Create babyTuple tree #
     #########################
 
-    print "Creating output babytuple (", outputFile, ")"
+    print "> Creating output babytuple ("+outputFile+")"
     babyTuple = genericTree.Writer(outputFile,"babyTuple")
     babyTuple.addBranches(analyzerBabyTupleFormat)
 
@@ -39,7 +41,7 @@ def treeProcess(inputFile, Analyzer, outputFile) :
     # Setup progress bar #
     ######################
 
-    print "Starting loop"
+    print "> Starting loop"
     progressBarWidth = 50
     sys.stdout.write("[%s]" % (" " * progressBarWidth))
     sys.stdout.flush()
@@ -72,10 +74,13 @@ def treeProcess(inputFile, Analyzer, outputFile) :
     # Write and close babytuple #
     #############################
 
-    babyTuple.writeAndClose()
-
     sys.stdout.write("\n")
     sys.stdout.flush()
+
+    print "> Writing and closing output tree."
+    babyTuple.writeAndClose()
+    print "> Done."
+
 
 def treeProcessingWorker(id, queue) :
 
@@ -102,10 +107,19 @@ def treeProcessingWorker(id, queue) :
         sys.stderr = open(logFileName,"w")
 
         # Launch processing function
-        treeProcess(dataset.files[i], Analyzer, outputFile)
+        treeProcess(dataset.files[i], Analyzer, outputFile, dataset)
 
         # Restore old stdout/stderr
         sys.stdout = oldStdout
         sys.stderr = oldStderr
 
+
+def getNumberOfInitialEvents(inputFileName) :
+
+    # Open file and get number of entries in hcount
+    theFile = root_open(inputFileName,"READ")
+    theCountHisto = theFile.Get("FlatTree/hcount")
+    count = theCountHisto.GetEntries();
+    theFile.Close()
+    return count;
 

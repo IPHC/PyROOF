@@ -25,24 +25,27 @@ parser.add_option("-j", "--WMSworker", dest="wmsWorkerMode", default=False,
 
 from config import config
 print " "
-print "Selected analysis  :", config.analysisName
-print "Selected processor :", config.processorName
+print " [Analysis module] ", config.analysisName
+print " [Tree processor]  ", config.processorName
 print " "
 
 if (options.debugMode) :
-    print "Launching debugging mode"
+    print " Running in debugging mode"
+    print " -------------------------"
     print " "
     from config import debuggingMode
     debuggingMode.main()
 
 elif (options.localMultiprocessingMode) :
-    print "Launching local multiprocessing mode"
+    print " Running in local multiprocessing mode"
+    print " -------------------------------------"
     print " "
     from config import localMultiprocessing
     localMultiprocessing.main()
 
 elif (options.wmsTaskCreatorMode) :
-    print "Creating WMS task"
+    print " Creating WMS task"
+    print " -----------------"
     print " "
     from config import wmsTaskCreator
     wmsTaskCreator()

@@ -16,5 +16,9 @@ nWorkers = 10
 from core import localMultiprocessing
 
 def main() :
-    localMultiprocessing.launch(config.processorParallel,config.analyzer,config.datasets,nWorkers,outputFolder)
+    localMultiprocessing.launch(config.processor,
+                                config.analyzer,
+                                config.datasets,
+                                nWorkers,
+                                outputFolder)
 

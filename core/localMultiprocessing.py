@@ -4,6 +4,10 @@ import glob
 from multiprocessing     import Queue, Process
 
 def launch(processor,Analyzer,datasets,nWorkers,outputFolder) :
+ 
+    for dataset in datasets :
+        dataset.load(processor.getNumberOfInitialEvents)
+    print " "
 
     ##################
     # Initiate queue #
@@ -18,7 +22,7 @@ def launch(processor,Analyzer,datasets,nWorkers,outputFolder) :
     print "[Main] Creating pool of", nWorkers, "workers"
     workers = []
     for id in range(nWorkers) :
-        w = Process(target=processor,args=(id,queue))
+        w = Process(target=processor.treeProcessingWorker,args=(id,queue))
         w.daemon = True
         w.start()
         workers.append(w)
