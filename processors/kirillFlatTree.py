@@ -65,6 +65,7 @@ def treeProcess(inputFile, Analyzer, outputFile, dataset) :
         babyTuple.getTree().reset_branch_values()
 
         # Call analysis-specific process function #
+        #fillEvent = analyzer.process(event,babyTuple.getTree(),True)
         fillEvent = analyzer.process(event,babyTuple.getTree())
 
         # If event should be filled, fill it #
