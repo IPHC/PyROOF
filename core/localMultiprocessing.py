@@ -4,7 +4,31 @@ import glob
 from multiprocessing     import Queue, Process
 
 def launch(processor,Analyzer,datasets,nWorkers,outputFolder) :
- 
+
+    ##################
+    # Initial checks #
+    ##################
+    
+    # Check output folder exists
+    if (os.path.isdir(outputFolder) == False) :
+        print "Output folder, "+outputFolder+", doesn't exists."
+        return
+
+    # Check output folder doesn't contain rootfiles already
+    if (len(glob.glob(outputFolder+"/*.root")) != 0) :
+        print "Output folder, "+outputFolder+", already contains root files."
+        print "To make sure this script doesn't erase previous outputs, please move them elsewhere or remove them."
+        return
+   
+    # Check writing permissions to output folder
+    if (os.access(outputFolder, os.W_OK) == False) :
+        print "You do not have permissions to write to the output folder, "+outputFolder+"."
+        return
+
+    #################
+    # Load datasets #
+    #################
+
     for dataset in datasets :
         dataset.load(processor.getNumberOfInitialEvents)
     print " "

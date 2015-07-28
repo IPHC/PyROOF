@@ -12,10 +12,8 @@ parser.add_option("-d", "--debug", dest="debugMode", default=False,
                           action="store_true", help="Debug mode, meant to check if recent modifications in analysis code didn't break anything.")
 parser.add_option("-l", "--local", dest="localMultiprocessingMode", default=False,
                           action="store_true", help="Local multiprocessing mode, run on N workers")
-parser.add_option("-w", "--WMStask", dest="wmsTaskCreatorMode", default=False,
-                          action="store_true", help="Create a WMS task to run on the cluster. You'll need the proper tool to submit/monitor the task.")
-parser.add_option("-j", "--WMSworker", dest="wmsWorkerMode", default=False,
-                          action="store_true", help="(Not for user.) To be used by jobs created by a WMS tasks.")
+parser.add_option("-b", "--batch", dest="pbsMultiprocessingMode", default=False,
+                          action="store_true", help="Batch/PBS multprocessing mode, launch one PBS job for each file to run on.")
 
 (options, args) = parser.parse_args()
 
@@ -43,17 +41,12 @@ elif (options.localMultiprocessingMode) :
     from config import localMultiprocessing
     localMultiprocessing.main()
 
-elif (options.wmsTaskCreatorMode) :
-    print " Creating WMS task"
+elif (options.pbsMultiprocessingMode) :
+    print " Running in batch/PBS multiprocessing mode"
     print " -----------------"
     print " "
-    from config import wmsTaskCreator
-    wmsTaskCreator()
-
-elif (options.wmsWorkerMode) :
-    # TODO
-    from config import wmsTaskCreator
-    wmsWorker()
+    from config import pbsMultiprocessing
+    pbsMultiprocessing.main()
 
 else :
     print "No running mode selected, try --help"

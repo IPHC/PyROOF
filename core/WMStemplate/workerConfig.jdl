@@ -1,6 +1,0 @@
-Executable = "/bin/sh";
-StdOutput = "log";
-StdError = "log";
-InputSandbox={"workerJob.sh"};
-OutputSandbox = { "log" };
-Requirements=other.GlueCEUniqueID=="sbgce2.in2p3.fr:8443/cream-pbs-cms";
