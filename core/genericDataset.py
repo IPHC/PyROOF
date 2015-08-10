@@ -23,6 +23,7 @@ class Dataset:
             # Path to use for rfdir (below)
             dpmPath = self.wildcard.replace("dpm:","/dpm/in2p3.fr/home/cms/phedex/store/user/")
             # Path to use for root_open (later)
+            # xrdPath = self.wildcard.replace("dpm:","root://sbgse1.in2p3.fr//cms/phedex/store/user/")
             xrdPath = self.wildcard.replace("dpm:","root://sbgse1.in2p3.fr//cms/phedex/store/user/")
 
             cmd = "/usr/bin/rfdir", dpmPath
@@ -33,7 +34,9 @@ class Dataset:
             for line in out.split('\n') :
                 fields = line.split()
                 if (len(fields) == 9) :
-                    self.files.append(xrdPath+"/"+fields[8])
+                    fileName = fields[8];
+                    if (fileName == "failed") : continue
+                    self.files.append(xrdPath+"/"+fileName)
 
         else :
             print "Wildcard for dataset ", self.name, "doesn't starts with 'local:' or 'dpm:'"
@@ -54,9 +57,5 @@ class Dataset:
             self.initialNumberOfEvents += int(methodToGetNumberOfEvent(file))
 
         print "Found", len(self.files), "files,", self.initialNumberOfEvents, "total initial number of events"
-
-
-
-
 
 
