@@ -1,4 +1,4 @@
-
+import time
 import os
 import glob
 from multiprocessing     import Queue, Process
@@ -8,7 +8,7 @@ def launch(processor,Analyzer,datasets,nWorkers,outputFolder) :
     ##################
     # Initial checks #
     ##################
-    
+
     # Check output folder exists
     if (os.path.isdir(outputFolder) == False) :
         print "Output folder, "+outputFolder+", doesn't exists."
@@ -19,7 +19,7 @@ def launch(processor,Analyzer,datasets,nWorkers,outputFolder) :
         print "Output folder, "+outputFolder+", already contains root files."
         print "To make sure this script doesn't erase previous outputs, please move them elsewhere or remove them."
         return
-   
+
     # Check writing permissions to output folder
     if (os.access(outputFolder, os.W_OK) == False) :
         print "You do not have permissions to write to the output folder, "+outputFolder+"."
@@ -56,9 +56,9 @@ def launch(processor,Analyzer,datasets,nWorkers,outputFolder) :
     ########################################
 
     if os.path.exists(outputFolder+"/tmp") :
-        os.system("rm -r "+outputFolder+"/tmp/") 
-    
-    os.mkdir(outputFolder+"/tmp/") 
+        os.system("rm -r "+outputFolder+"/tmp/")
+
+    os.mkdir(outputFolder+"/tmp/")
 
     print "[Main] Filling queue..."
     print " "
@@ -66,7 +66,7 @@ def launch(processor,Analyzer,datasets,nWorkers,outputFolder) :
 
         print "[Main] Queuing", dataset.name, ",",len(dataset.files), " files."
 
-        os.mkdir(outputFolder+"/tmp/"+dataset.name) 
+        os.mkdir(outputFolder+"/tmp/"+dataset.name)
 
         for i in range(len(dataset.files)) :
 
@@ -79,6 +79,8 @@ def launch(processor,Analyzer,datasets,nWorkers,outputFolder) :
     #####################################
 
     print "[Main] Waiting for workers..."
+
+    startTime = time.time()
 
     for i in range(nWorkers) :
         queue.put("DONE")
@@ -100,7 +102,10 @@ def launch(processor,Analyzer,datasets,nWorkers,outputFolder) :
 
     print "[Main] Removing tmp/*/*.root"
     for file in glob.glob(outputFolder+"/tmp/*/*.root") :
-        os.remove(file) 
+        os.remove(file)
 
     print "[Main] ---------"
     print "[Main] All done."
+    print "[Main] Time elapsed :", time.strftime("%H:%M:%S", time.gmtime(time.time() - startTime))
+    print "[Main] Outputs available in", outputFolder
+    print "[Main] ---------"

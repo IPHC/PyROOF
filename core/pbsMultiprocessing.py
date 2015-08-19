@@ -3,13 +3,14 @@ import glob
 import fileinput
 import subprocess
 import time
+import signal
 
 def launch(processor,Analyzer,datasets,queueName,outputFolder) :
- 
+
     ##################
     # Initial checks #
     ##################
-    
+
     # Check user has a directory in /home-pbs
     if (os.path.isdir("/home-pbs/"+os.getlogin()) == False) :
         print "You don't have a directory in /home-pbs/. Contact a system administrator."
@@ -34,15 +35,19 @@ def launch(processor,Analyzer,datasets,queueName,outputFolder) :
     ##########################################
     # Create working area in /home-pbs/user/ #
     ##########################################
-    
+
     print "[Main] Creating working area for PBS in /home-pbs/"+os.getlogin()+" ... "
-    
+
     # If needed, copy the ~/.local folder to /home-pbs/user/ to have rootpy
     if (os.path.isdir("/home-pbs/"+os.getlogin()+"/.local") == False) :
         os.system("cp -r ~/.local /home-pbs/"+os.getlogin()+"/.local")
-        
+
+    # If needed, copy the ~/.local folder to /home-pbs/user/ to have rootpy
+    if (os.path.isdir("/home-pbs/"+os.getlogin()+"/.cache/rootpy") == False) :
+        os.system("mkdir -p /home-pbs/"+os.getlogin()+"/.cache/rootpy")
+
     # Copy this PyROOF folder to shared volume
-    # (Option L for cp will dereference the symlinks, effectively copying the 
+    # (Option L for cp will dereference the symlinks, effectively copying the
     # content pointed by a symlink instead of just copying the link itself)
     timeStamp = time.strftime("%y%m%d_%H%M%S")
     PBSworkingDir = "/home-pbs/"+os.getlogin()+"/PyROOF_"+timeStamp
@@ -66,45 +71,45 @@ def launch(processor,Analyzer,datasets,queueName,outputFolder) :
 
     shJobTemplate = "core/pbsTemplate/job.sh"
     pyJobTemplate = "core/pbsTemplate/job.py"
-    
+
     if os.path.exists(outputFolder+"/tmp") :
-        os.system("rm -r "+outputFolder+"/tmp/") 
-    
-    os.mkdir(outputFolder+"/tmp/") 
-    
-    jobs = {} 
+        os.system("rm -r "+outputFolder+"/tmp/")
+
+    os.mkdir(outputFolder+"/tmp/")
+
+    jobs = {}
     PBSsubprocesses = {}
 
     print " "
     print "[Main] Creating PBS jobs ..."
-            
+
     #################################
     # For each file of each dataset #
     #################################
-    
+
     for (i,dataset) in enumerate(datasets) :
 
         print "[Queuing "+dataset.name+", "+str(len(dataset.files))+" files]"
-        
+
         # Create a list for each dataset
         PBSsubprocesses[dataset.name]   = []
         jobs[dataset.name] = []
 
-        os.mkdir(outputFolder +"/tmp/"+dataset.name) 
-        
+        os.mkdir(outputFolder +"/tmp/"+dataset.name)
+
         for j in range(len(dataset.files)) :
 
             ############################
             # Create the bash job file #
             ############################
-            
+
             jobFile          = "PBSjob_" + dataset.name + "_" + str(j) + ".sh"
             jobFile_fullpath = PBSworkingDir + "/" + jobFile
             outputFile         = outputFolder+"/tmp/"+dataset.name+"/PBSjob_"+str(j)+".root"
-            
+
             # Add it to the jobs list
             jobs[dataset.name].append(jobFile)
-            
+
             os.system("cp " + shJobTemplate + " " + jobFile_fullpath)
 
             for line in fileinput.input(jobFile_fullpath, inplace=True):
@@ -114,7 +119,7 @@ def launch(processor,Analyzer,datasets,queueName,outputFolder) :
                 line = line.replace('LAUNCH_PYTHON_SCRIPT', 'python '+pyJobTemplate+' '+str(i)+' '+str(j)+' '+outputFile)
                 line = line.rstrip('\n')
                 print(line)
-    
+
     #######################
     # Launch all the jobs #
     #######################
@@ -123,7 +128,7 @@ def launch(processor,Analyzer,datasets,queueName,outputFolder) :
 
     # Move to PBS working dir
     os.chdir(PBSworkingDir)
-  
+
     # Launch each jobs for each dataset,
     # keep track of the corresponding processes
     # to check their status later
@@ -135,61 +140,93 @@ def launch(processor,Analyzer,datasets,queueName,outputFolder) :
     #########################
     # Check pbs jobs status #
     #########################
-    
+
     print "[Main] Jobs launched. Starting jobs monitoring ..."
     print " "
-    
+
+    startTime = time.time()
+
+    try :
+        monitorPBSJobs(datasets,PBSworkingDir,PBSsubprocesses,outputFolder)
+        print "[Main] ---------"
+        print "[Main] All done."
+        print "[Main] Time elapsed :", time.strftime("%H:%M:%S", time.gmtime(time.time() - startTime))
+        print "[Main] Outputs available in", outputFolder
+        print "[Main] ---------"
+        print "[Main] Don't forget to clean the working area(s), /home-pbs/"+os.getlogin()+"/PyROOF_*"
+    except :
+        print "[Main] Interruption caught - aborting jobs."
+        result = subprocess.check_output("qdel `qstat -u"+os.getlogin()+" | grep "+os.getlogin()+" | cut -d'.' -f1`", shell=True)
+        print "[Main] Done."
+
+
+def monitorPBSJobs(datasets,PBSworkingDir,PBSsubprocesses,outputFolder) :
+
+    # Init counters
+
     datasetsRemaining = len(datasets)
-    
-    DatasetRemoved  = {}
-    for key, value in jobs.iteritems() :
-        DatasetRemoved[key] = False
+
+    datasetIsDone  = {}
+    for dataset in datasets :
+        datasetIsDone[dataset.name] = False
+
+    # While there are remaining datasets
 
     while (datasetsRemaining > 0) :
 
-        # Wait a few seconds
-        time.sleep(30)
-        
         # Check & parse job status
         jobStatus = pbsStatus(PBSsubprocesses)
 
         for dataset, isDone in jobStatus.iteritems():
 
+            # If a new dataset is done
+            # (i.e. ignore if not done, or dataset already done)
+
             if (isDone == False) : continue
-            if (DatasetRemoved[dataset] == True) : continue
+            if (datasetIsDone[dataset] == True) : continue
+
+            # Update the counters
 
             print "[Main] Dataset ", dataset, "is fully processed."
-            datasetsRemaining -= 1
-            
-            for d in datasets :
-                if d.name == dataset:
-                    
-                    jobOutputsWildcard = outputFolder + "/tmp/" + d.name + "/*.root";
-                    numberOfFilesInOutputFolder = len(glob.glob(jobOutputsWildcard))
+            datasetsRemaining = datasetsRemaining - 1
+            datasetIsDone[dataset] = True
 
-                    if (len(d.files) != numberOfFilesInOutputFolder) :
-                        print "ERROR : the number of files produced does not match : ", \
-                               numberOfFilesInOutputFolder, "found, vs", len(d.files), "expected."
-                    else : 
-                        #  Merge outputs, remove tmp files
-                        DatasetRemoved[dataset] = True
-                        print " "
-                        print "[Main] Merging " + dataset
-                        datasetOutput = outputFolder+"/"+dataset+".root "
-                        os.system("hadd -f "+datasetOutput+" "+jobOutputsWildcard)
+            # And merge the outputs
 
-                        print "[Main] Removing "+jobOutputsWildcard
-                        for file in glob.glob(jobOutputsWildcard) :
-                            os.remove(file) 
-                        print " "
-  
-    print "[Main] ---------"
-    print "[Main] All done."
-    print "[Main] Outputs available in", outputFolder
-    print "[Main] You may want to clean the working area(s), /home-pbs/"+os.getlogin()+"/PyROOF_*"
+            mergeDataset(datasets,dataset,PBSworkingDir,outputFolder)
 
-def pbsStatus(dataset_idlist):
-    
+        # Wait a few seconds
+        time.sleep(30)
+
+
+
+def mergeDataset(datasets,datasetName,PBSworkingDir,outputFolder) :
+
+    for d in datasets :
+
+        if (d.name != datasetName) : continue
+
+        jobOutputsWildcard = outputFolder + "/tmp/" + datasetName + "/*.root";
+        numberOfFilesInOutputFolder = len(glob.glob(jobOutputsWildcard))
+
+        if (len(d.files) != numberOfFilesInOutputFolder) :
+            print "ERROR : the number of files produced does not match : ", \
+                   numberOfFilesInOutputFolder, "found, vs", len(d.files), "expected."
+            print "Check logs in", PBSworkingDir
+        else :
+            #  Merge outputs, remove tmp files
+            print " "
+            print "[Main] Merging " + datasetName
+            datasetOutputFile = outputFolder+"/"+datasetName+".root "
+            os.system("hadd -f "+datasetOutputFile+" "+jobOutputsWildcard)
+
+            print "[Main] Removing "+jobOutputsWildcard
+            for file in glob.glob(jobOutputsWildcard) :
+                os.remove(file)
+            print " "
+
+def pbsStatus(dataset_idlist) :
+
     # Create a summmary of dataset jobs
     dataset_summary = {key:{'RUN':0, 'QUEUED':0, 'HOLD':0, 'ALL':len(value)} for key, value  in dataset_idlist.iteritems()}
 
@@ -197,19 +234,19 @@ def pbsStatus(dataset_idlist):
     username = os.getlogin()
     result = subprocess.check_output("qstat -u " + username, shell=True)
     #print result
-    
+
     # Parse results of the command
     lines = result.split('\n')
     for line in lines:
-        
+
         list = line.split()
         if (len(list) != 11) : continue
-        
+
         for dataset, value in dataset_idlist.iteritems():
             for jid in value:
-                
+
                 if (jid[0].split('\n')[0] != list[0]) : continue
-                
+
                 if list[9] == "R":
                     dataset_summary[dataset]['RUN'] +=1
                 if list[9] == "Q":
@@ -222,7 +259,7 @@ def pbsStatus(dataset_idlist):
     allRun    = 0
     allDone   = 0
     allJobs   = 0
-    
+
     # Return a status per dataset (True if all jobs are ended)
     datasetIsDone = {}
 
@@ -230,16 +267,16 @@ def pbsStatus(dataset_idlist):
     headers = [ "Dataset", "Submitted", "Running", "Done", "All" ]
     table = []
     for dataset, value in dataset_idlist.iteritems():
-        
+
         summary = dataset_summary[dataset]
         tot     = summary['ALL']
         run     = summary['RUN']
         queued  = summary['QUEUED']
         hold    = summary['HOLD']
         done    = tot - (run + queued + hold)
-       
+
         datasetIsDone[dataset] = (done == tot)
-       
+
         table.append([dataset,queued,run,done,tot])
 
         # Sum datasets to have a global summary
@@ -247,7 +284,7 @@ def pbsStatus(dataset_idlist):
         allRun    += run
         allDone   += done
         allJobs   += tot
-        
+
     table.append(["All",allQueued,allRun,allDone,allJobs])
 
     # The actual display (using black magic from stackoverflow)
@@ -263,4 +300,7 @@ def pbsStatus(dataset_idlist):
 
     return datasetIsDone
 
+def abbortHandler(signal, frame) :
+    print("Aborting jobs.")
 
+    sys.exit(0)
