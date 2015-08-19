@@ -51,9 +51,9 @@ git clone https://github.com/oneLeptonStopAt13TeV/phys14Selection.git analysis/s
 
 And change the analysis name in `config/config.py`.
 
-For further configuration, you may look in the `/config/` folder, in particular `localMultiprocessing.py` and `wmsTaskCreator.py` allow you to configure for instance the number of workers.
+For further configuration, you may look in the `/config/` folder, in particular `localMultiprocessing.py` and `pbsMultiprocessing.py` allow you to configure for instance the number of workers and the output directory.
 
-To get help about options (to launch in debug mode, local multiprocessing or WMS task), type
+To get help about options (to launch in debug mode, local multiprocessing or PBS/batch mode), type
 
 ```
 ./PyROOF.py --help
@@ -62,7 +62,6 @@ To get help about options (to launch in debug mode, local multiprocessing or WMS
 Todo
 ----
 
-- Remove WMS task creation, get PBS tasks working instead
-- Option to block mass production if there are uncommited analyses changes + automatically flag prod with the last analysis' code commit ID ?
-- Option to run only on n% of the dataset files
-- Display run time + time per event at the end of execution
+- Automatically timestamp output folder ?
+- Option to run only on n% of the dataset files ?
+- Display run time + time per event at the end of execution ?
