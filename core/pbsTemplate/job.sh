@@ -34,7 +34,7 @@ export X509_USER_PROXY=/home-pbs/$USER/.dpmProxy
 # LD_LIBRARY_PATH
 # ---------------
 
-CMSSW_ENV=7_3_0
+CMSSW_ENV=7_4_7
 export LD_LIBRARY_PATH=\
 /cvmfs/cms.cern.ch/slc6_amd64_gcc491/external/gcc/4.9.1-cms/lib64/:\
 /cvmfs/cms.cern.ch/slc6_amd64_gcc491/external/gcc/4.9.1-cms/lib:\
@@ -46,7 +46,7 @@ $LD_LIBRARY_PATH
 # Python 2.7.6
 # ------------
 
-export PATH=/cvmfs/cms.cern.ch/slc6_amd64_gcc491/cms/cmssw/CMSSW_7_3_0/external/slc6_amd64_gcc491/bin:\
+export PATH=/cvmfs/cms.cern.ch/slc6_amd64_gcc491/cms/cmssw/CMSSW_7_4_7/external/slc6_amd64_gcc491/bin:\
 /cvmfs/cms.cern.ch/slc6_amd64_gcc491/external/gcc/4.9.1-cms/bin:\
 $PATH
 export PYTHONDIR=/cvmfs/cms.cern.ch/slc6_amd64_gcc491/external/python/2.7.6-cms
@@ -56,7 +56,7 @@ export PYTHONPATH=/home-pbs/$USER/.local/:$ROOTSYS/lib:$PYTHONPATH
 # ROOT 5.34
 # ---------
 
-source /cvmfs/cms.cern.ch/slc6_amd64_gcc491/cms/cmssw/CMSSW_7_3_0/external/slc6_amd64_gcc491/bin/thisroot.sh
+source /cvmfs/cms.cern.ch/slc6_amd64_gcc491/cms/cmssw/CMSSW_7_4_7/external/slc6_amd64_gcc491/bin/thisroot.sh
 export LD_LIBRARY_PATH=$ROOTSYS/lib:$LD_LIBRARY_PATH
 
 ############################################
