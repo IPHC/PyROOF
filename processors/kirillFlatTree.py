@@ -5,6 +5,7 @@ from rootpy.io   import root_open
 
 log["/ROOT.TClassTable.Add"].setLevel(log.ERROR)
 log["/ROOT.TGClient.TGClient"].setLevel(log.ERROR)
+log["/rootpy"].setLevel(log.ERROR)
 
 genericTreeWriter = genericTree.Writer
 genericTreeReader = genericTree.Reader

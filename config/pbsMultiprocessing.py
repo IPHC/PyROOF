@@ -7,9 +7,10 @@ import config
 # #############
 
 userName = os.getlogin()
-outputFolder = "/opt/sbg/scratch1/cms/"+userName+"/store/babyTuples/"
+outputFolder = "/opt/sbg/scratch1/cms/"+userName+"/store/tmp/"
 
-queue="sbg_local_short"
+queue="sbg_local"
+filesPerJobs=5
 
 # ##################
 # #  Initial call  #
@@ -22,5 +23,6 @@ def main() :
                               config.analyzer,
                               config.datasets,
                               queue,
+                              filesPerJobs,
                               outputFolder)
 

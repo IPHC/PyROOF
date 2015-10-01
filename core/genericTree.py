@@ -8,6 +8,8 @@ class Reader:
 
     def loadTree(self,inputFileName,treePath) :
 
+        ROOT.gSystem.Setenv("XNet.UseOldClient","yes")
+
         # Open file and get tree
         self.theTreeFile = root_open(inputFileName,"READ")
         self.theTree     = self.theTreeFile.Get(treePath)
