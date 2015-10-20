@@ -5,7 +5,7 @@ import subprocess
 import time
 import signal
 
-def launch(processor,Analyzer,datasets,queueName,outputFolder) :
+def launch(processor,Analyzer,datasets,queueName,numberOfFilesPerJob,outputFolder) :
 
     ##################
     # Initial checks #
@@ -89,7 +89,11 @@ def launch(processor,Analyzer,datasets,queueName,outputFolder) :
 
     for (i,dataset) in enumerate(datasets) :
 
-        print "[Queuing "+dataset.name+", "+str(len(dataset.files))+" files]"
+        numberOfJobs = len(dataset.files)/numberOfFilesPerJob
+        if (len(dataset.files)%numberOfFilesPerJob) :
+            numberOfJobs += 1
+
+        print "[Queuing "+dataset.name+", "+str(numberOfJobs)+" jobs for "+str(len(dataset.files))+" files]"
 
         # Create a list for each dataset
         PBSsubprocesses[dataset.name]   = []
@@ -97,7 +101,7 @@ def launch(processor,Analyzer,datasets,queueName,outputFolder) :
 
         os.mkdir(outputFolder +"/tmp/"+dataset.name)
 
-        for j in range(len(dataset.files)) :
+        for j in range(numberOfJobs) :
 
             ############################
             # Create the bash job file #
@@ -105,7 +109,7 @@ def launch(processor,Analyzer,datasets,queueName,outputFolder) :
 
             jobFile          = "PBSjob_" + dataset.name + "_" + str(j) + ".sh"
             jobFile_fullpath = PBSworkingDir + "/" + jobFile
-            outputFile         = outputFolder+"/tmp/"+dataset.name+"/PBSjob_"+str(j)+".root"
+            outputFile       = outputFolder+"/tmp/"+dataset.name+"/PBSjob_"+str(j)+".root"
 
             # Add it to the jobs list
             jobs[dataset.name].append(jobFile)
@@ -116,7 +120,7 @@ def launch(processor,Analyzer,datasets,queueName,outputFolder) :
                 line = line.replace('LOGFILE', jobFile_fullpath+".log")
                 line = line.replace('ERRFILE', jobFile_fullpath+".err")
                 line = line.replace('MOVE_TO_WORKING_AREA', 'cd '+PBSworkingDir)
-                line = line.replace('LAUNCH_PYTHON_SCRIPT', 'python '+pyJobTemplate+' '+str(i)+' '+str(j)+' '+outputFile)
+                line = line.replace('LAUNCH_PYTHON_SCRIPT', 'python '+pyJobTemplate+' '+str(i)+' '+str(j)+' '+str(numberOfFilesPerJob)+' '+outputFile)
                 line = line.rstrip('\n')
                 print(line)
 
@@ -203,7 +207,7 @@ def monitorPBSJobs(datasets,PBSworkingDir,PBSsubprocesses,outputFolder) :
 def mergeDataset(datasets,datasetName,PBSworkingDir,outputFolder) :
 
     for d in datasets :
-
+    
         if (d.name != datasetName) : continue
 
         jobOutputsWildcard = outputFolder + "/tmp/" + datasetName + "/*.root";

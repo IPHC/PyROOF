@@ -65,3 +65,5 @@ Todo
 - Automatically timestamp output folder ?
 - Option to run only on n% of the dataset files ?
 - Display run time + time per event at the end of execution ?
+- Be able to choose number of file per job in PBS mode
+- Check compression usage in kirill's flat tree when opening the tree
