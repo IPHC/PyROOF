@@ -55,7 +55,7 @@ def treeProcess(inputFile, Analyzer, outputFile, dataset) :
     i = 0
     nEntries = flatTreeReader.getTree().GetEntries()
     for event in flatTreeReader.getTree() :
-       
+    	#if(i>2000): break  
         # Update progress bar #
         i += 1
         if (i % (nEntries/progressBarWidth) == 0) : 
@@ -78,6 +78,11 @@ def treeProcess(inputFile, Analyzer, outputFile, dataset) :
 
     sys.stdout.write("\n")
     sys.stdout.flush()
+
+    # write histogram containing the sum of input event weights
+    analyzer.hWeights.Write()
+    analyzer.hWeightsPlus.Write()
+    analyzer.hWeightsMinus.Write()
 
     print "> Writing and closing output tree."
     babyTuple.writeAndClose()
