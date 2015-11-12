@@ -1,0 +1,22 @@
+[DEFAULT]
+
+doIsoStudy = False
+loadMCTruth_Var = False
+loadGenMET = False
+loadPFcand = False
+    	
+loadGenInfo = False
+saveGenInfo = False
+
+loadAK8 = True	
+saveAK8 = True
+
+[SELECTION]
+
+#pt-cut for electron selection
+electronPtCut = 20
+#pt-cut for muon selection
+muonPtCut = 20
+#will only store event with at last N jets
+jet_multiplicity = 3
+    	
