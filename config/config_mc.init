@@ -3,7 +3,7 @@
 doIsoStudy = False
 loadMCTruth_Var = False
 loadGenMET = True
-loadPFcand = False
+loadPFcand = True
     	
 loadGenInfo = True
 saveGenInfo = True
@@ -18,5 +18,5 @@ electronPtCut = 20
 #pt-cut for muon selection
 muonPtCut = 20
 #will only store event with at last N jets
-jet_multiplicity = 3
+jet_multiplicity = 1
     	
