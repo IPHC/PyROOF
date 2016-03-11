@@ -1,0 +1,7 @@
+/dpm/in2p3.fr/home/cms/phedex/store/user/mjansova/MantaRay-patch7-v16022016/TT_TuneCUETP8M1_13TeV-powheg-pythia8/RunIISpring15MiniAODv2_74X_mcRun2_asymptotic_v2_v1_MINIAODSIM/160217_124452/0000
+/dpm/in2p3.fr/home/cms/phedex/store/user/mjansova/MantaRay-patch7-v16022016/TT_TuneCUETP8M1_13TeV-powheg-pythia8/RunIISpring15MiniAODv2_74X_mcRun2_asymptotic_v2_v1_MINIAODSIM/160217_124452/0001
+/dpm/in2p3.fr/home/cms/phedex/store/user/mjansova/MantaRay-patch7-v16022016/ST_t-channel_4f_leptonDecays_13TeV-amcatnlo-pythia8_TuneCUETP8M1/RunIISpring15MiniAODv2_74X_mcRun2_asymptotic_v2_v1_MINIAODSIM/160217_124517/0000
+/dpm/in2p3.fr/home/cms/phedex/store/user/mjansova/MantaRay-patch7-v16022016/ST_t-channel_4f_leptonDecays_13TeV-amcatnlo-pythia8_TuneCUETP8M1/RunIISpring15MiniAODv2_74X_mcRun2_asymptotic_v2_v1_MINIAODSIM/160217_124517/0001
+/dpm/in2p3.fr/home/cms/phedex/store/user/mjansova/WJetsToLNu_HT-100To200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISpring15MiniAODv2_74X_mcRun2_asymptotic_v2_v1_MINIAODSIM/160217_103412/0000
+/dpm/in2p3.fr/home/cms/phedex/store/user/mjansova/WJetsToLNu_HT-100To200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISpring15MiniAODv2_74X_mcRun2_asymptotic_v2_v1_MINIAODSIM/160217_103412/0001
+/dpm/in2p3.fr/home/cms/phedex/store/user/mjansova/MantaRay-patch7-v16022016/WJetsToLNu_HT-200To400_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISpring15MiniAODv2_74X_mcRun2_asymptotic_v2_v1_MINIAODSIM/160217_103437/0000

@@ -3,13 +3,16 @@
 doIsoStudy = False
 loadMCTruth_Var = False
 loadGenMET = False
-loadPFcand = False
+loadPFcand = True
     	
 loadGenInfo = False
 saveGenInfo = False
 
-loadAK8 = True	
-saveAK8 = True
+loadAK8 = False	
+saveAK8 = False
+
+loadAK10 = False	
+saveAK10 = False
 
 [SELECTION]
 

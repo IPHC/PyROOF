@@ -11,6 +11,9 @@ saveGenInfo = True
 loadAK8 = True	
 saveAK8 = True
 
+loadAK10 = True	
+saveAK10 = True
+
 [SELECTION]
 
 #pt-cut for electron selection

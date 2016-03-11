@@ -83,6 +83,7 @@ def treeProcess(inputFile, Analyzer, outputFile, dataset) :
     analyzer.hWeights.Write()
     analyzer.hWeightsPlus.Write()
     analyzer.hWeightsMinus.Write()
+    analyzer.hStopNeutralino.Write()
 
     print "> Writing and closing output tree."
     babyTuple.writeAndClose()
