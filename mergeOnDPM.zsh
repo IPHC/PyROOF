@@ -1,5 +1,7 @@
 #!/bin/env zsh
 
+#use ./mergeOnDPM.zsh 20 (specify number of files to merge)
+
 #list of directories with files to merge
 slist="list.txt"
 
@@ -27,6 +29,7 @@ do
     t="${i/${locold}/${loc}}"
 
     f=1
+    #file=[]
 
     #read files into array
     cat tmp | while read line
@@ -51,6 +54,8 @@ do
 
     counter=1
     iter=1
+    #arr=[]
+    #arr2=[]
     arr[${counter}]=hadd" "${t}"/merged/"merged_${counter}.root
     arr2[${counter}]=/usr/bin/rfrm
 
@@ -63,6 +68,7 @@ do
             arr[${counter}]=hadd" "${t}"/merged/"merged_${counter}.root
             arr2[${counter}]=/usr/bin/rfrm
         fi
+        file[${iter}]=""
         iter=$(($iter + 1))
         arr[${counter}]=${arr[${counter}]}" "${t}"/"${j}
         arr2[${counter}]=${arr2[${counter}]}" "${i}"/"${j}
@@ -73,12 +79,15 @@ do
     #apply hadd and rfrm commands
     for l in "${arr[@]}"
     do
+        #echo $l
         eval $l
+        arr[${pos}]=""
         #echo ${arr2[$pos]} #@MJ@ TODO compare size of input and output and then remove
         pos=$(($pos + 1))     
     done
 
+rm tmp
 done
 
 #remove temporary file 
-rm tmp
+
