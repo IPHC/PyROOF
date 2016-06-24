@@ -151,13 +151,13 @@ def launch(processor,Analyzer,datasets,queueName,numberOfFilesPerJob,outputFolde
     startTime = time.time()
 
     try :
-        monitorPBSJobs(datasets,PBSworkingDir,PBSsubprocesses,outputFolder)
-        print "[Main] ---------"
-        print "[Main] All done."
-        print "[Main] Time elapsed :", time.strftime("%H:%M:%S", time.gmtime(time.time() - startTime))
-        print "[Main] Outputs available in", outputFolder
-        print "[Main] ---------"
-        print "[Main] Don't forget to clean the working area(s), /home-pbs/"+os.getlogin()+"/PyROOF_*"
+    	monitorPBSJobs(datasets,PBSworkingDir,PBSsubprocesses,outputFolder)
+   	print "[Main] ---------"
+    	print "[Main] All done."
+   	print "[Main] Time elapsed :", time.strftime("%H:%M:%S", time.gmtime(time.time() - startTime))
+    	print "[Main] Outputs available in", outputFolder
+    	print "[Main] ---------"
+    	print "[Main] Don't forget to clean the working area(s), /home-pbs/"+os.getlogin()+"/PyROOF_*"
     except :
         print "[Main] Interruption caught - aborting jobs."
         result = subprocess.check_output("qdel `qstat -u"+os.getlogin()+" | grep "+os.getlogin()+" | cut -d'.' -f1`", shell=True)
@@ -237,27 +237,37 @@ def pbsStatus(dataset_idlist) :
     # Call PBS status command
     username = os.getlogin()
     result = subprocess.check_output("qstat -u " + username, shell=True)
-    #print result
+    print result
 
     # Parse results of the command
     lines = result.split('\n')
+    MCol = 11 # Max nof columns is 6 and not 11 anymore
+    SCol = 9 # status column in qstat output is now 5 and not 9 anymore
     for line in lines:
-
+	print line
         list = line.split()
-        if (len(list) != 11) : continue
+        if (len(list) != MCol) : continue
 
         for dataset, value in dataset_idlist.iteritems():
             for jid in value:
-
-                if (jid[0].split('\n')[0] != list[0]) : continue
-
-                if list[9] == "R":
-                    dataset_summary[dataset]['RUN'] +=1
-                if list[9] == "Q":
-                    dataset_summary[dataset]['QUEUED'] +=1
-                if list[9] == "H":
-                    dataset_summary[dataset]['HOLD'] +=1
-
+		print "jobid ", jid[0]
+                print "list ", list[0]
+		if (jid[0].split('.')[0] != list[0].split('.')[0]) : 
+			print 'there are different',jid[0],list[0]
+		else:
+			print 'they are the same'
+			print list[SCol]
+		#if (jid[0].split('\n')[0] != list[0]) : continue
+		#if (jid[0].split('.')[0] != list[0].split('.')[0]) : continue
+		if (jid[0].split('.')[0] == list[0].split('.')[0]) :
+		  	print "status ",  list[SCol]
+                  	if list[SCol] == "R":
+                    	  	dataset_summary[dataset]['RUN'] +=1
+                  	if list[SCol] == "Q":
+                   		 dataset_summary[dataset]['QUEUED'] +=1
+                	if list[SCol] == "H":
+                   		 dataset_summary[dataset]['HOLD'] +=1
+    
     # Sum datasets to have a global summary
     allQueued = 0
     allRun    = 0
