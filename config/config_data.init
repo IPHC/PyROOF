@@ -1,5 +1,7 @@
 [DEFAULT]
 
+isData = True
+computeVar = False
 doIsoStudy = False
 loadMCTruth_Var = False
 loadGenMET = False
@@ -13,6 +15,9 @@ saveAK8 = False
 
 loadAK10 = False	
 saveAK10 = False
+
+loadTriggerBranches = False
+saveTriggerInfo = False
 
 [SELECTION]
 

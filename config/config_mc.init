@@ -1,18 +1,23 @@
 [DEFAULT]
 
+isData = False
+computeVar = True
 doIsoStudy = False
 loadMCTruth_Var = False
-loadGenMET = True
+loadGenMET = False
 loadPFcand = True
     	
-loadGenInfo = True
-saveGenInfo = True
+loadGenInfo = False
+saveGenInfo = False
 
-loadAK8 = True	
-saveAK8 = True
+loadAK8 = False
+saveAK8 = False
 
-loadAK10 = True	
-saveAK10 = True
+loadAK10 = False	
+saveAK10 = False
+
+loadTriggerBranches = False
+saveTriggerInfo = False
 
 [SELECTION]
 
