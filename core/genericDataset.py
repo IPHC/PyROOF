@@ -1,6 +1,7 @@
 import glob
 import sys, subprocess
 import fnmatch
+import commands #deprecated but more efficient than subprocess
 
 #######################################################
 class Dataset:
@@ -23,24 +24,32 @@ class Dataset:
         if (self.wildcard.startswith("local:")) :
             self.files       = glob.glob(self.wildcard.replace("local:",""))
         elif (self.wildcard.startswith("dpm:")) :
-
+	
             # Path to use for rfdir (below)
             dpmPath = self.wildcard.replace("dpm:","/dpm/in2p3.fr/home/cms/phedex/store/user/")
             # Path to use for root_open (later)
-            # xrdPath = self.wildcard.replace("dpm:","root://sbgse1.in2p3.fr//cms/phedex/store/user/")
             xrdPath = self.wildcard.replace("dpm:","root://sbgse1.in2p3.fr//cms/phedex/store/user/")
 
-            cmd = "/usr/bin/rfdir", dpmPath
+            #cmd = "/usr/bin/rfdir", dpmPath
+            cmd = "/usr/bin/rfdir", dpmPath,">/dev/null 2>&1"
 
-            p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
-            p.wait()
-            (out, err) = p.communicate()
+	    out = commands.getoutput("/usr/bin/rfdir "+dpmPath)
+	    
+	    ### more general but too slow ...
+	    ##p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
+	    #p = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+            #p.wait()
+            
+	    
+	    #(out, err) = p.communicate()
+	    #print 'communicate'
             for line in out.split('\n') :
                 fields = line.split()
                 if (len(fields) == 9) :
                     fileName = fields[8];
                     if (fileName == "failed") : continue
                     self.files.append(xrdPath+"/"+fileName)
+	
 
         #specify interval of output files you want to read
         # @MJ@ TODO generalize the names of files to read
