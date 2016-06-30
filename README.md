@@ -59,6 +59,19 @@ To get help about options (to launch in debug mode, local multiprocessing or PBS
 ./PyROOF.py --help
 ```
 
+
+New features
+----
+
+- Add a new mode to run on a give root-file and select it at execution time - passed as arguments in the command line - option: -O datasetname rootfile-path
+
+
+Temporary modifications
+----
+- Change the name of the tree in processors/kirillFlatTree.py to copte with new temporaty production
+
+
+
 Todo
 ----
 
