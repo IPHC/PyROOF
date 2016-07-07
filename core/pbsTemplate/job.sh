@@ -56,7 +56,7 @@ export PYTHONPATH=/home-pbs/$USER/.local/:$ROOTSYS/lib:$PYTHONPATH
 #source /cvmfs/cms.cern.ch/${VERSION}/cms/cmssw/CMSSW_${CMSSW_ENV}/external/${VERSION}/bin/thisroot.sh
 source /cvmfs/cms.cern.ch/slc6_amd64_gcc530/lcg/root/6.06.00-ikhhed3/bin/thisroot.sh
 export LD_LIBRARY_PATH=$ROOTSYS/lib:$LD_LIBRARY_PATH
-
+LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD
 
 #cd /cvmfs/cms.cern.ch/slc6_amd64_gcc530/cms/cmssw/CMSSW_8_0_5/src
 #eval `scramv1 runtime -sh`
@@ -86,6 +86,7 @@ root -l -b --version -q
 # To be replaced by job creater/submitter
 MOVE_TO_WORKING_AREA
 PYTHONPATH=$PYTHONPATH:$PWD
+LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD
 
 echo " "
 echo "> Launch the analysis"

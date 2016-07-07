@@ -7,7 +7,7 @@ import config
 
 outputFolder = "../store/babyTuples/"
 
-nWorkers = 10
+nWorkers = 12
 
 # ##################
 # #  Initial call  #

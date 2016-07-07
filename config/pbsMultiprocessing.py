@@ -9,8 +9,13 @@ import config
 userName = os.getlogin()
 outputFolder = "/opt/sbg/scratch1/cms/"+userName+"/store/tmp/"
 
-queue="sbg_local"
-filesPerJobs=5
+#queue="sbg_local"
+#queue="sbg_local_short"
+#queue="cms_local_short"
+#queue="cms_local"
+queue="cms_local_mdm"
+
+filesPerJobs=1
 
 # ##################
 # #  Initial call  #

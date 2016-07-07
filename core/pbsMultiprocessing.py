@@ -237,30 +237,30 @@ def pbsStatus(dataset_idlist) :
     # Call PBS status command
     username = os.getlogin()
     result = subprocess.check_output("qstat -u " + username, shell=True)
-    print result
+    #print result
 
     # Parse results of the command
     lines = result.split('\n')
     MCol = 11 # Max nof columns is 6 and not 11 anymore
     SCol = 9 # status column in qstat output is now 5 and not 9 anymore
     for line in lines:
-	print line
+	#print line
         list = line.split()
         if (len(list) != MCol) : continue
 
         for dataset, value in dataset_idlist.iteritems():
             for jid in value:
-		print "jobid ", jid[0]
-                print "list ", list[0]
-		if (jid[0].split('.')[0] != list[0].split('.')[0]) : 
-			print 'there are different',jid[0],list[0]
-		else:
-			print 'they are the same'
-			print list[SCol]
+		#print "jobid ", jid[0]
+                #print "list ", list[0]
+		#if (jid[0].split('.')[0] != list[0].split('.')[0]) : 
+		#	print 'there are different',jid[0],list[0]
+		#else:
+		#	print 'they are the same'
+		#	print list[SCol]
 		#if (jid[0].split('\n')[0] != list[0]) : continue
 		#if (jid[0].split('.')[0] != list[0].split('.')[0]) : continue
 		if (jid[0].split('.')[0] == list[0].split('.')[0]) :
-		  	print "status ",  list[SCol]
+		  	#print "status ",  list[SCol]
                   	if list[SCol] == "R":
                     	  	dataset_summary[dataset]['RUN'] +=1
                   	if list[SCol] == "Q":

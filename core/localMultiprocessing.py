@@ -100,9 +100,9 @@ def launch(processor,Analyzer,datasets,nWorkers,outputFolder) :
         print "[Main] Merging "+dataset.name
         os.system("hadd -f "+outputFolder+"/"+dataset.name+".root "+outputFolder+"/tmp/"+dataset.name+"/*.root")
 
-    print "[Main] Removing tmp/*/*.root"
-    for file in glob.glob(outputFolder+"/tmp/*/*.root") :
-        os.remove(file)
+    #print "[Main] Removing tmp/*/*.root"
+    #for file in glob.glob(outputFolder+"/tmp/*/*.root") :
+    #    os.remove(file)
 
     print "[Main] ---------"
     print "[Main] All done."
