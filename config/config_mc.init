@@ -4,8 +4,8 @@ isData = False
 computeVar = True
 doIsoStudy = False
 loadMCTruth_Var = False
-loadGenMET = False
-loadPFcand = True
+loadGenMET = True
+loadPFcand = False
     	
 loadGenInfo = False
 saveGenInfo = False

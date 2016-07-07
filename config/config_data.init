@@ -16,8 +16,9 @@ saveAK8 = False
 loadAK10 = False	
 saveAK10 = False
 
-loadTriggerBranches = False
-saveTriggerInfo = False
+loadTriggerBranches = True
+saveTriggerInfo = True
+
 
 [SELECTION]
 
