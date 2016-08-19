@@ -35,7 +35,7 @@ export X509_USER_PROXY=/home-pbs/$USER/.dpmProxy
 # LD_LIBRARY_PATH
 # ---------------
 
-cd /home-pbs/echabert/CMSSW_8_0_5/src
+cd /home-pbs/$USER/CMSSW_8_0_7_patch1/src
 eval `scramv1 runtime -sh`
 cd -
 
