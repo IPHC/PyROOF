@@ -7,7 +7,7 @@ loadMCTruth_Var = False
 loadGenMET = True
 loadPFcand = False
     	
-loadGenInfo = False
+loadGenInfo = True
 saveGenInfo = False
 
 loadAK8 = False
@@ -16,8 +16,12 @@ saveAK8 = False
 loadAK10 = False	
 saveAK10 = False
 
-loadTriggerBranches = False
-saveTriggerInfo = False
+load_qg_tag = False
+
+loadStop = True
+
+loadTriggerBranches = True
+saveTriggerInfo = True
 
 [SELECTION]
 
