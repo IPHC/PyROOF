@@ -2,6 +2,7 @@ from rootpy import log
 from core   import genericTree
 import os, sys, time
 from rootpy.io   import root_open
+import ROOT
 
 log["/ROOT.TClassTable.Add"].setLevel(log.ERROR)
 log["/ROOT.TGClient.TGClient"].setLevel(log.ERROR)
@@ -12,6 +13,12 @@ genericTreeReader = genericTree.Reader
 
 def treeProcess(inputFile, Analyzer, outputFile, dataset) :
 
+    theInputFile = root_open(inputFile,"READ")
+    theWeightHisto = theInputFile.Get("FlatTree/hweight")
+    binCon = theWeightHisto.GetBinContent(1);
+    print "hist content"
+    print binCon
+    theInputFile.Close()
     ###################
     # Create analyzer #
     ###################
@@ -80,6 +87,9 @@ def treeProcess(inputFile, Analyzer, outputFile, dataset) :
     sys.stdout.flush()
 
     # write histogram containing the sum of input event weights
+    htotweight = ROOT.TH1D("htotweight","htotweight",1,0.5,1.5)
+    htotweight.SetBinContent(1,binCon)
+    htotweight.Write()
     analyzer.hWeights.Write()
     analyzer.hWeightsPlus.Write()
     analyzer.hWeightsMinus.Write()

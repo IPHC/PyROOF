@@ -1,6 +1,6 @@
 [DEFAULT]
 
-isData = False
+isData = True
 computeVar = True
 doIsoStudy = False
 loadMCTruth_Var = False
