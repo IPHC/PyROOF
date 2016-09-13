@@ -47,6 +47,7 @@ Plug your analysis selection, babyTuple format, variables and datasets in `analy
 
 ```
 git clone https://github.com/oneLeptonStopAt13TeV/phys14Selection.git analysis/stopPhys14
+touch analysis/__init.py__
 ```
 
 And change the analysis name in `config/config.py`.
