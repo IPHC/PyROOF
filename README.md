@@ -37,7 +37,7 @@ Install
 Clone this repository :
 
 ```
-git glone https://github.com/IPHC/PyROOF.git
+git clone https://github.com/IPHC/PyROOF.git
 ```
 
 Usage
